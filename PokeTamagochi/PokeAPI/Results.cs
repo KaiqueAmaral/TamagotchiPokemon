@@ -1,4 +1,6 @@
-﻿namespace PokeTamagochi.PokeAPI;
+﻿using Newtonsoft.Json;
+
+namespace PokeTamagochi.PokeAPI;
 
 internal class Results
 {
@@ -11,5 +13,18 @@ internal class Results
 
     public string Name { get; }
     public string Url { get; }
+
+
+
+    public static PokemonEspecificacoes ConverteDadosRecebidosDaAPI(string json)
+    {
+        PokemonEspecificacoes dados;
+
+
+        dados = JsonConvert.DeserializeObject<PokemonEspecificacoes>(json);
+
+      
+        return dados;
+    }
 
 }

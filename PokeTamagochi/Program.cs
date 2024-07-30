@@ -5,9 +5,37 @@ using System;
 using PokeTamagochi.PokeAPI;
 
 ApiResponse pokemonApiResponse;
+Dictionary<string, Results> pokemonsDisponiveis = new();
 
 const string URL_PRINCIPAL_API = "https://pokeapi.co/api/v2/pokemon";
-Dictionary<string, Results> pokemonsDisponiveis = new();
+
+
+void Iniciar()
+{
+    string dadosApiEmJson = "";
+    try
+    {
+        dadosApiEmJson = ApiResponse.ConectarComAPI(URL_PRINCIPAL_API);
+
+        if(!dadosApiEmJson.StartsWith("Erro"))
+        {
+            pokemonsDisponiveis = ApiResponse.ConverteDadosRecebidosDaAPI(dadosApiEmJson);
+
+            ExibirTelaInicial();
+        }
+        else
+        {
+            Console.WriteLine(dadosApiEmJson);
+        }
+
+        
+
+    }
+    catch (Exception ex)
+    {
+    }
+}
+
 
 void ExibirTelaInicial()
 {
@@ -28,79 +56,42 @@ void ExibirTelaInicial()
 }
 
 
-
-void ConexaoComAPI(string url)
-{
-    try
-    {
-        var client = new RestClient(url);
-        var request = new RestRequest("", Method.Get);
-        var response = client.Get(request);
-
-        if (response.StatusCode == HttpStatusCode.OK && response.Content != null)
-        {
-            ConverteDadosRecebidosDaAPI(response.Content);
-            ExibirTelaInicial();
-
-        }
-        else
-        {
-            Console.WriteLine("Erro de conexão com API. Detalhes: " + response.ErrorMessage);
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error: {ex.Message}");
-    }
-    
-
-}
-
-void ConverteDadosRecebidosDaAPI(string responseAPI)
-{
-
-    pokemonApiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseAPI);
-
-    foreach(Results pokemon in pokemonApiResponse.Results)
-    {
-        pokemonsDisponiveis.Add($"{pokemon.Name}", pokemon);
-    }
-      
-}
-
 void ExibeTodosPokemonsDisponiveis()
 {
     foreach (string nome in pokemonsDisponiveis.Keys)
     {
         Console.WriteLine("-" + nome);
     }
+
+    Console.WriteLine();
+
 }
 
 void ExibeDetalhesDoPokemon(string nome)
 {
+    Console.Clear();
+
+    PokemonEspecificacoes pokemonDetalhes;
+
     Results pokemon = pokemonsDisponiveis[nome];
-    PokemonEspecificacoes pokemonDetalhes = new PokemonEspecificacoes();
 
-    var client = new RestClient(pokemon.Url);
-    var request = new RestRequest("", Method.Get);
-    var response = client.Get(request);
+    string repostaApiEmJson = ApiResponse.ConectarComAPI(pokemon.Url);
 
-    if (response.StatusCode == HttpStatusCode.OK && response.Content != null)
+   
+    if (!repostaApiEmJson.StartsWith("Erro"))
     {
-
-        pokemonDetalhes = JsonConvert.DeserializeObject<PokemonEspecificacoes>(response.Content);
+        pokemonDetalhes = Results.ConverteDadosRecebidosDaAPI(repostaApiEmJson);
+    }
+    else
+    {
+        Console.WriteLine(repostaApiEmJson);
+        return;
     }
 
-    Console.WriteLine(pokemonDetalhes.Name);
-    Console.WriteLine(pokemonDetalhes.BaseExperience);
-    Console.WriteLine(pokemonDetalhes.Height);
-    Console.WriteLine(pokemonDetalhes.Id);
-    Console.WriteLine(pokemonDetalhes.IsDefault);
-    Console.WriteLine(pokemonDetalhes.LocantionAreaEncountersUrl);
-    Console.WriteLine(pokemonDetalhes.Order);
-    Console.WriteLine(pokemonDetalhes.Weight);
-
+    Console.WriteLine($"-Nome: {pokemonDetalhes.Name}\n-Experiência base: {pokemonDetalhes.BaseExperience}\n-Altura: {pokemonDetalhes.Height}\n-Número pokedex: {pokemonDetalhes.Id}\n" +
+        $"-É inicial: {pokemonDetalhes.IsDefault}\n-Ulr das áreas de encontro: {pokemonDetalhes.LocantionAreaEncountersUrl}\n-Ordem: {pokemonDetalhes.Order}\n" +
+        $"-Peso: {pokemonDetalhes.Weight}");
 
 }
 
-ConexaoComAPI(URL_PRINCIPAL_API);
+Iniciar();
