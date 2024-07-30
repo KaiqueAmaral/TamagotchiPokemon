@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using System;
 using PokeTamagochi.PokeAPI;
 
-ApiResponse pokemonApiResponse;
 Dictionary<string, Results> pokemonsDisponiveis = new();
 
 const string URL_PRINCIPAL_API = "https://pokeapi.co/api/v2/pokemon";
