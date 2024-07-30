@@ -1,9 +1,9 @@
-﻿namespace PokeTamagochi;
+﻿namespace PokeTamagochi.PokeAPI;
 
-internal class Pokemon
+internal class Results
 {
 
-    public Pokemon(string name, string url)
+    public Results(string name, string url)
     {
         Name = name;
         Url = url;
