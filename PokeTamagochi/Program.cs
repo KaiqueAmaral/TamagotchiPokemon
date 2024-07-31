@@ -92,9 +92,13 @@ void ShowPokemonInfo(string name)
         return;
     }
 
-    Console.WriteLine($"-Nome: {pokemonInfo.Name}\n-Experiência base: {pokemonInfo.BaseExperience}\n-Altura: {pokemonInfo.Height}\n-Número pokedex: {pokemonInfo.Id}\n" +
-        $"-É inicial: {pokemonInfo.IsDefault}\n-Ulr das áreas de encontro: {pokemonInfo.LocantionAreaEncountersUrl}\n-Ordem: {pokemonInfo.Order}\n" +
-        $"-Peso: {pokemonInfo.Weight}");
+    Console.WriteLine($"-Nome: {pokemonInfo.Name}\n-Altura: {pokemonInfo.Height}\n-Peso: {pokemonInfo.Weight}\n-Experiência base: {pokemonInfo.BaseExperience}\n" +
+        $"-Número pokedex: {pokemonInfo.Id}\n-Habilidades: ");
+
+    foreach(PokemonAbilities abilities in pokemonInfo.Abilities)
+    {
+        Console.WriteLine($"\t-{abilities.Ability.Name}, {abilities.Ability.UrlInfo}");
+    }
 
 }
 

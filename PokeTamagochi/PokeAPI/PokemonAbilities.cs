@@ -7,12 +7,14 @@ internal class PokemonAbilities
 
     public PokemonAbilities()
     {
-        
+        //Abilities = new List<AbilityReference>();
     }
 
-    public string Name { get; set; }
+    public AbilityReference Ability { get; set; }
 
-    [JsonProperty("url")]
-    public string InfoUrl { get; set; }
+
+    [JsonProperty("is_hidden")]
+    public bool IsHidden { get; set; }
+    public int Slot { get; set; }
 
 }

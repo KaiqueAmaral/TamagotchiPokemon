@@ -7,7 +7,7 @@ internal class PokemonInfo
     //Mostras alguns detalhes especificos por enquanto
     public PokemonInfo()
     {
-
+        Abilities = new List<PokemonAbilities>();
     }
     public List<PokemonAbilities> Abilities { get; set; }
 
