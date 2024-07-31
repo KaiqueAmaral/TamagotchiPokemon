@@ -2,13 +2,14 @@
 
 namespace PokeTamagochi.PokeAPI;
 
-internal class PokemonEspecificacoes
+internal class PokemonInfo
 {
     //Mostras alguns detalhes especificos por enquanto
-    public PokemonEspecificacoes()
+    public PokemonInfo()
     {
 
     }
+    public List<PokemonAbilities> Abilities { get; set; }
 
     [JsonProperty("base_experience")]
     public int BaseExperience { get; set; }

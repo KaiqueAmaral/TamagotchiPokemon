@@ -4,27 +4,30 @@ using Newtonsoft.Json;
 using System;
 using PokeTamagochi.PokeAPI;
 
-Dictionary<string, Results> pokemonsDisponiveis = new();
-
-const string URL_PRINCIPAL_API = "https://pokeapi.co/api/v2/pokemon";
+Dictionary<string, Pokemon> availablePokemons = new();
 
 
-void Iniciar()
+void Start()
 {
-    string dadosApiEmJson = "";
+    string apiDataJson = "";
+
+    PokemonSpecies pokemonApiResponse;
     try
     {
-        dadosApiEmJson = ApiResponse.ConectarComAPI(URL_PRINCIPAL_API);
+        apiDataJson = PokeApiManager.ExecuteGetRequest(PokeApiManager.baseUrl);
 
-        if(!dadosApiEmJson.StartsWith("Erro"))
+        if(!apiDataJson.StartsWith("Erro"))
         {
-            pokemonsDisponiveis = ApiResponse.ConverteDadosRecebidosDaAPI(dadosApiEmJson);
 
-            ExibirTelaInicial();
+            pokemonApiResponse = PokeApiManager.ParseAPIResult<PokemonSpecies>(apiDataJson);
+
+            availablePokemons = Pokemon.CreatePokemonDictionary(pokemonApiResponse.Pokemons);
+
+            DisplayHomeScreen();
         }
         else
         {
-            Console.WriteLine(dadosApiEmJson);
+            Console.WriteLine(apiDataJson);
         }
 
         
@@ -36,7 +39,7 @@ void Iniciar()
 }
 
 
-void ExibirTelaInicial()
+void DisplayHomeScreen()
 {
     Console.WriteLine("******************************");
     Console.WriteLine("Bem vindos ao PokeTamagochi!");
@@ -44,53 +47,55 @@ void ExibirTelaInicial()
 
     Console.WriteLine("Aqui estão todas as opções de pokémons disponíveis para serem selecionados:\n");
 
-    ExibeTodosPokemonsDisponiveis();
+    ShowAllAvailablePokemons();
 
     Console.Write("Digite o nome de algum pokemon para exibir detalhes: ");
 
-    string nomePokemonEscolhido = Console.ReadLine()!;
+    string chosenPokemonName = Console.ReadLine()!;
 
-    ExibeDetalhesDoPokemon(nomePokemonEscolhido);
+    ShowPokemonInfo(chosenPokemonName);
 
 }
 
 
-void ExibeTodosPokemonsDisponiveis()
+void ShowAllAvailablePokemons()
 {
-    foreach (string nome in pokemonsDisponiveis.Keys)
+    foreach (string name in availablePokemons.Keys)
     {
-        Console.WriteLine("-" + nome);
+        Console.WriteLine("-" + name);
     }
 
     Console.WriteLine();
 
 }
 
-void ExibeDetalhesDoPokemon(string nome)
+void ShowPokemonInfo(string name)
 {
     Console.Clear();
 
-    PokemonEspecificacoes pokemonDetalhes;
+    PokemonInfo pokemonInfo;
 
-    Results pokemon = pokemonsDisponiveis[nome];
+    Pokemon pokemon = availablePokemons[name];
 
-    string repostaApiEmJson = ApiResponse.ConectarComAPI(pokemon.Url);
+    string apiDataJson = PokeApiManager.ExecuteGetRequest(pokemon.InfoUrl);
 
    
-    if (!repostaApiEmJson.StartsWith("Erro"))
+    if (!apiDataJson.StartsWith("Erro"))
     {
-        pokemonDetalhes = Results.ConverteDadosRecebidosDaAPI(repostaApiEmJson);
+        pokemonInfo = PokeApiManager.ParseAPIResult<PokemonInfo>(apiDataJson);
+
+        //pokemonDetalhes = Pokemon.ConverteDadosRecebidosDaAPI(repostaApiEmJson);
     }
     else
     {
-        Console.WriteLine(repostaApiEmJson);
+        Console.WriteLine(apiDataJson);
         return;
     }
 
-    Console.WriteLine($"-Nome: {pokemonDetalhes.Name}\n-Experiência base: {pokemonDetalhes.BaseExperience}\n-Altura: {pokemonDetalhes.Height}\n-Número pokedex: {pokemonDetalhes.Id}\n" +
-        $"-É inicial: {pokemonDetalhes.IsDefault}\n-Ulr das áreas de encontro: {pokemonDetalhes.LocantionAreaEncountersUrl}\n-Ordem: {pokemonDetalhes.Order}\n" +
-        $"-Peso: {pokemonDetalhes.Weight}");
+    Console.WriteLine($"-Nome: {pokemonInfo.Name}\n-Experiência base: {pokemonInfo.BaseExperience}\n-Altura: {pokemonInfo.Height}\n-Número pokedex: {pokemonInfo.Id}\n" +
+        $"-É inicial: {pokemonInfo.IsDefault}\n-Ulr das áreas de encontro: {pokemonInfo.LocantionAreaEncountersUrl}\n-Ordem: {pokemonInfo.Order}\n" +
+        $"-Peso: {pokemonInfo.Weight}");
 
 }
 
-Iniciar();
+Start();
