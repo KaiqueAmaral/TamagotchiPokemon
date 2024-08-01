@@ -1,10 +1,12 @@
-﻿using RestSharp;
-using System.Net;
-using Newtonsoft.Json;
-using System;
+﻿using PokeTamagochi;
 using PokeTamagochi.PokeAPI;
+using System.Runtime.CompilerServices;
 
 Dictionary<string, Pokemon> availablePokemons = new();
+
+string userName;
+int userAge;
+bool exit = false;
 
 
 void Start()
@@ -16,13 +18,14 @@ void Start()
     {
         apiDataJson = PokeApiManager.ExecuteGetRequest(PokeApiManager.baseUrl);
 
-        if(!apiDataJson.StartsWith("Erro"))
+        if (!apiDataJson.StartsWith("Erro"))
         {
 
             pokemonApiResponse = PokeApiManager.ParseAPIResult<PokemonSpecies>(apiDataJson);
 
             availablePokemons = Pokemon.CreatePokemonDictionary(pokemonApiResponse.Pokemons);
 
+            GetUserInfo();
             DisplayHomeScreen();
         }
         else
@@ -30,7 +33,7 @@ void Start()
             Console.WriteLine(apiDataJson);
         }
 
-        
+
 
     }
     catch (Exception ex)
@@ -39,23 +42,63 @@ void Start()
 }
 
 
+void GetUserInfo()
+{
+    Console.WriteLine("Antes de começarmos por favor preencha alguns dados.");
+    Console.Write("Qual o seu nome? ");
+    userName = Console.ReadLine()!;
+    Console.WriteLine();
+    Console.Write("Qual a sua idade? ");
+    userAge = int.Parse(Console.ReadLine()!);
+}
+
 void DisplayHomeScreen()
 {
-    Console.WriteLine("******************************");
-    Console.WriteLine("Bem vindos ao PokeTamagochi!");
-    Console.WriteLine("******************************\n");
+    while (!exit)
+    {
+        Console.Clear();
 
-    Console.WriteLine("Aqui estão todas as opções de pokémons disponíveis para serem selecionados:\n");
+        Console.WriteLine(@"
+██████╗░░█████╗░██╗░░██╗███████╗████████╗░█████╗░███╗░░░███╗░█████╗░░██████╗░░█████╗░░█████╗░██╗░░██╗██╗
+██╔══██╗██╔══██╗██║░██╔╝██╔════╝╚══██╔══╝██╔══██╗████╗░████║██╔══██╗██╔════╝░██╔══██╗██╔══██╗██║░░██║██║
+██████╔╝██║░░██║█████═╝░█████╗░░░░░██║░░░███████║██╔████╔██║███████║██║░░██╗░██║░░██║██║░░╚═╝███████║██║
+██╔═══╝░██║░░██║██╔═██╗░██╔══╝░░░░░██║░░░██╔══██║██║╚██╔╝██║██╔══██║██║░░╚██╗██║░░██║██║░░██╗██╔══██║██║
+██║░░░░░╚█████╔╝██║░╚██╗███████╗░░░██║░░░██║░░██║██║░╚═╝░██║██║░░██║╚██████╔╝╚█████╔╝╚█████╔╝██║░░██║██║
+╚═╝░░░░░░╚════╝░╚═╝░░╚═╝╚══════╝░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝░░╚═╝░╚═════╝░░╚════╝░░╚════╝░╚═╝░░╚═╝╚═╝
+");
 
-    ShowAllAvailablePokemons();
+        Console.WriteLine($"Boas vindas ao PokeTamagochi {userName}!\n");
 
-    Console.Write("Digite o nome de algum pokemon para exibir detalhes: ");
+        Console.WriteLine("O que deseja fazer?");
 
-    string chosenPokemonName = Console.ReadLine()!;
+        Console.WriteLine("1- Adotar um pokémon");
+        Console.WriteLine("2- Ver pokémons adotados");
+        Console.WriteLine("3- Sair");
 
-    ShowPokemonInfo(chosenPokemonName);
+        int userInput = int.Parse(Console.ReadLine()!);
+
+        switch (userInput)
+        {
+            case 1:
+                Menu.DisplayAdoptionMenu(availablePokemons);
+                break;
+
+            case 2:
+                break;
+
+            case 3:
+                break;
+
+            default:
+                Console.WriteLine("Opção inválida");
+                exit = true;
+                break;
+        }
+    }
+  
 
 }
+
 
 
 void ShowAllAvailablePokemons()
@@ -79,7 +122,7 @@ void ShowPokemonInfo(string name)
 
     string apiDataJson = PokeApiManager.ExecuteGetRequest(pokemon.InfoUrl);
 
-   
+
     if (!apiDataJson.StartsWith("Erro"))
     {
         pokemonInfo = PokeApiManager.ParseAPIResult<PokemonInfo>(apiDataJson);
@@ -95,7 +138,7 @@ void ShowPokemonInfo(string name)
     Console.WriteLine($"-Nome: {pokemonInfo.Name}\n-Altura: {pokemonInfo.Height}\n-Peso: {pokemonInfo.Weight}\n-Experiência base: {pokemonInfo.BaseExperience}\n" +
         $"-Número pokedex: {pokemonInfo.Id}\n-Habilidades: ");
 
-    foreach(PokemonAbilities abilities in pokemonInfo.Abilities)
+    foreach (PokemonAbilities abilities in pokemonInfo.Abilities)
     {
         Console.WriteLine($"\t-{abilities.Ability.Name}, {abilities.Ability.UrlInfo}");
     }
