@@ -4,8 +4,7 @@ using System.Runtime.CompilerServices;
 
 Dictionary<string, Pokemon> availablePokemons = new();
 
-string userName;
-int userAge;
+
 bool exit = false;
 
 
@@ -46,10 +45,10 @@ void GetUserInfo()
 {
     Console.WriteLine("Antes de começarmos por favor preencha alguns dados.");
     Console.Write("Qual o seu nome? ");
-    userName = Console.ReadLine()!;
+    Menu.UserName = Console.ReadLine()!;
     Console.WriteLine();
     Console.Write("Qual a sua idade? ");
-    userAge = int.Parse(Console.ReadLine()!);
+    Menu.UserAge = int.Parse(Console.ReadLine()!);
 }
 
 void DisplayHomeScreen()
@@ -67,13 +66,13 @@ void DisplayHomeScreen()
 ╚═╝░░░░░░╚════╝░╚═╝░░╚═╝╚══════╝░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝░░╚═╝░╚═════╝░░╚════╝░░╚════╝░╚═╝░░╚═╝╚═╝
 ");
 
-        Console.WriteLine($"Boas vindas ao PokeTamagochi {userName}!\n");
+        Console.WriteLine($"Boas vindas ao PokeTamagochi {Menu.UserName}!\n");
 
         Console.WriteLine("O que deseja fazer?");
 
-        Console.WriteLine("1- Adotar um pokémon");
-        Console.WriteLine("2- Ver pokémons adotados");
-        Console.WriteLine("3- Sair");
+        Console.WriteLine("1 - Adotar um pokémon");
+        Console.WriteLine("2 - Ver pokémons adotados");
+        Console.WriteLine("3 - Sair\n");
 
         int userInput = int.Parse(Console.ReadLine()!);
 
