@@ -72,7 +72,7 @@ void DisplayHomeScreen()
 
     Console.WriteLine("1 - Adotar um pokémon");
     Console.WriteLine("2 - Ver pokémons adotados");
-    Console.WriteLine("-1 - Sair\n");
+    Console.WriteLine("3 - Sair\n");
 
     int userInput = int.Parse(Console.ReadLine()!);
 
