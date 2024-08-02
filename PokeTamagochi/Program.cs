@@ -6,7 +6,7 @@ Dictionary<string, Pokemon> availablePokemons = new();
 
 
 bool exit = false;
-
+User userData;
 
 void Start()
 {
@@ -45,19 +45,19 @@ void GetUserInfo()
 {
     Console.WriteLine("Antes de começarmos por favor preencha alguns dados.");
     Console.Write("Qual o seu nome? ");
-    Menu.UserName = Console.ReadLine()!;
+    string name = Console.ReadLine()!;
     Console.WriteLine();
     Console.Write("Qual a sua idade? ");
-    Menu.UserAge = int.Parse(Console.ReadLine()!);
+    int age = int.Parse(Console.ReadLine()!);
+
+    userData = new User(name, age);
 }
 
 void DisplayHomeScreen()
 {
-    while (!exit)
-    {
-        Console.Clear();
+    Console.Clear();
 
-        Console.WriteLine(@"
+    Console.WriteLine(@"
 ██████╗░░█████╗░██╗░░██╗███████╗████████╗░█████╗░███╗░░░███╗░█████╗░░██████╗░░█████╗░░█████╗░██╗░░██╗██╗
 ██╔══██╗██╔══██╗██║░██╔╝██╔════╝╚══██╔══╝██╔══██╗████╗░████║██╔══██╗██╔════╝░██╔══██╗██╔══██╗██║░░██║██║
 ██████╔╝██║░░██║█████═╝░█████╗░░░░░██║░░░███████║██╔████╔██║███████║██║░░██╗░██║░░██║██║░░╚═╝███████║██║
@@ -66,37 +66,42 @@ void DisplayHomeScreen()
 ╚═╝░░░░░░╚════╝░╚═╝░░╚═╝╚══════╝░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝░░╚═╝░╚═════╝░░╚════╝░░╚════╝░╚═╝░░╚═╝╚═╝
 ");
 
-        Console.WriteLine($"Boas vindas ao PokeTamagochi {Menu.UserName}!\n");
+    Console.WriteLine($"Boas vindas ao PokeTamagochi {userData.Name}!\n");
 
-        Console.WriteLine("O que deseja fazer?");
+    Console.WriteLine("O que deseja fazer?");
 
-        Console.WriteLine("1 - Adotar um pokémon");
-        Console.WriteLine("2 - Ver pokémons adotados");
-        Console.WriteLine("3 - Sair\n");
+    Console.WriteLine("1 - Adotar um pokémon");
+    Console.WriteLine("2 - Ver pokémons adotados");
+    Console.WriteLine("3 - Sair\n");
 
-        int userInput = int.Parse(Console.ReadLine()!);
+    int userInput = int.Parse(Console.ReadLine()!);
 
-        switch (userInput)
-        {
-            case 1:
-                Menu.DisplayAdoptionMenu(availablePokemons);
-                break;
+    switch (userInput)
+    {
+        case 1:
+            Menu.DisplayAdoptionList(availablePokemons, userData);
+            break;
 
-            case 2:
-                break;
+        case 2:
+            break;
 
-            case 3:
-                break;
+        case -1:
+            break;
 
-            default:
-                Console.WriteLine("Opção inválida");
-                exit = true;
-                break;
-        }
+        default:
+            Console.WriteLine("Opção inválida");
+            exit = true;
+            break;
     }
-  
 
+    if (userInput > 0)
+    {
+        DisplayHomeScreen();
+    }
 }
+
+
+
 
 
 
