@@ -72,7 +72,7 @@ void DisplayHomeScreen()
 
     Console.WriteLine("1 - Adotar um pokémon");
     Console.WriteLine("2 - Ver pokémons adotados");
-    Console.WriteLine("3 - Sair\n");
+    Console.WriteLine("-1 - Sair\n");
 
     int userInput = int.Parse(Console.ReadLine()!);
 
@@ -83,70 +83,22 @@ void DisplayHomeScreen()
             break;
 
         case 2:
+            Menu.DisplayAdoptedPokemons(userData);
             break;
 
-        case -1:
+        case 3:
+            Console.WriteLine($"Obrigado por jogar! Até uma proxima {userData.Name} <3");
             break;
 
         default:
             Console.WriteLine("Opção inválida");
-            exit = true;
             break;
     }
 
-    if (userInput > 0)
+    if (userInput != 3)
     {
         DisplayHomeScreen();
     }
-}
-
-
-
-
-
-
-void ShowAllAvailablePokemons()
-{
-    foreach (string name in availablePokemons.Keys)
-    {
-        Console.WriteLine("-" + name);
-    }
-
-    Console.WriteLine();
-
-}
-
-void ShowPokemonInfo(string name)
-{
-    Console.Clear();
-
-    PokemonInfo pokemonInfo;
-
-    Pokemon pokemon = availablePokemons[name];
-
-    string apiDataJson = PokeApiManager.ExecuteGetRequest(pokemon.InfoUrl);
-
-
-    if (!apiDataJson.StartsWith("Erro"))
-    {
-        pokemonInfo = PokeApiManager.ParseAPIResult<PokemonInfo>(apiDataJson);
-
-        //pokemonDetalhes = Pokemon.ConverteDadosRecebidosDaAPI(repostaApiEmJson);
-    }
-    else
-    {
-        Console.WriteLine(apiDataJson);
-        return;
-    }
-
-    Console.WriteLine($"-Nome: {pokemonInfo.Name}\n-Altura: {pokemonInfo.Height}\n-Peso: {pokemonInfo.Weight}\n-Experiência base: {pokemonInfo.BaseExperience}\n" +
-        $"-Número pokedex: {pokemonInfo.Id}\n-Habilidades: ");
-
-    foreach (PokemonAbilities abilities in pokemonInfo.Abilities)
-    {
-        Console.WriteLine($"\t-{abilities.Ability.Name}, {abilities.Ability.UrlInfo}");
-    }
-
 }
 
 Start();

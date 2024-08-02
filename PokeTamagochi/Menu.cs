@@ -43,11 +43,11 @@ internal static class Menu
         else
         {
             Console.WriteLine("\nPokémon não encontrado, retornando para o menu principal.");
-            Thread.Sleep(3000);    
+            Thread.Sleep(3000);
         }
 
 
-       
+
 
     }
 
@@ -103,7 +103,7 @@ internal static class Menu
         Console.WriteLine($"Número do pokedex: {pokemonDetails.Id}");
         Console.Write($"Habilidades: ");
 
-        foreach(PokemonAbilities ability in pokemonDetails.Abilities)
+        foreach (PokemonAbilities ability in pokemonDetails.Abilities)
         {
             Console.Write($"{ability.Ability.Name} | ");
 
@@ -145,6 +145,32 @@ internal static class Menu
 ´´´´´´´´´´´´´´´´´´´´´´´¶¶¶¶¶¶¶¶¶¶¶");
 
         Console.WriteLine("\nPressione qualquer tecla para voltar ao menu principal");
+        Console.ReadKey();
+    }
+
+
+    public static void DisplayAdoptedPokemons(User userData)
+    {
+        Console.Clear();
+
+        DisplayMenuTitle("Pokémons adotados!");
+
+        if (AdoptedPokemons.Count <= 0)
+        {
+            Console.WriteLine($"\n{userData.Name}, você não adotou nenhum pokémon ainda =(");
+            Thread.Sleep(3000);
+            return;
+        }
+
+        Console.WriteLine("Você já adotou os seguintes pokémons:\n");
+
+        foreach (string pokemonName in AdoptedPokemons.Keys)
+        {
+            Console.WriteLine($"-{pokemonName}");
+        }
+
+
+        Console.WriteLine("\nPressione qualquer botão para voltar ao menu principal");
         Console.ReadKey();
     }
 }
