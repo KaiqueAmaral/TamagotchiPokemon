@@ -1,4 +1,4 @@
-﻿namespace PokeTamagochi
+﻿namespace PokeTamagochi.Model
 {
     internal class User
     {
@@ -9,7 +9,7 @@
             Age = age;
         }
 
-        public string Name { get;}
-        public int Age { get;}
+        public string Name { get; }
+        public int Age { get; }
     }
 }

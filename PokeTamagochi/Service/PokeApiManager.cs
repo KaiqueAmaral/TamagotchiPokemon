@@ -1,10 +1,23 @@
 ﻿using Newtonsoft.Json;
+using PokeTamagochi.PokeAPI;
 using RestSharp;
 using System.Net;
 
-namespace PokeTamagochi.PokeAPI;
-internal static class PokeApiManager
+namespace PokeTamagochi.Service;
+internal class PokeApiManager
 {
+
+    public PokeApiManager()
+    {
+        Pokemons = new List<Pokemon>();
+    }
+    public int Count { get; set; }
+    public string Next { get; set; }
+    public string Previous { get; set; }
+
+    [JsonProperty("results")]
+    public List<Pokemon> Pokemons { get; set; }
+
 
     public static string baseUrl = "https://pokeapi.co/api/v2/pokemon";
 
