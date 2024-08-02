@@ -1,5 +1,4 @@
 ﻿using PokeTamagochi.Model;
-using PokeTamagochi.PokeAPI;
 using PokeTamagochi.Service;
 using PokeTamagochi.View;
 using System.ComponentModel.Design;

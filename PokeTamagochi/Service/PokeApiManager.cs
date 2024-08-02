@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using PokeTamagochi.PokeAPI;
+using PokeTamagochi.Model;
 using RestSharp;
 using System.Net;
 

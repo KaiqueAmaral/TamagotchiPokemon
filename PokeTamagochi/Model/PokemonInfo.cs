@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PokeTamagochi.PokeAPI;
+namespace PokeTamagochi.Model;
 
 internal class PokemonInfo
 {

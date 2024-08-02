@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 
-namespace PokeTamagochi.PokeAPI;
+namespace PokeTamagochi.Model;
 
 internal class AbilityReference
 {
 
     public AbilityReference()
     {
-        
+
     }
 
     public string Name { get; set; }
